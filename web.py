@@ -6,7 +6,8 @@ from utils import face_preprocess
 from PIL import ImageFont, ImageDraw, Image
 from utils.utils import feature_compare, load_mtcnn, load_faces, load_mobilefacenet, add_faces
 import gradio as gr
-
+import os
+os.environ["PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION"] = "python"
 
 # 人脸识别阈值
 VERIFICATION_THRESHOLD = config.VERIFICATION_THRESHOLD
@@ -105,10 +106,13 @@ def face_recognition(image):
             cv2img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             pilimg = Image.fromarray(cv2img)
             draw = ImageDraw.Draw(pilimg)
-            font = ImageFont.truetype('font/simfang.ttf', 18, encoding="utf-8")
-            draw.text((x1, y1 - 18), label, (255, 0, 0), font=font)
+            font = ImageFont.truetype('font/simfang.ttf', 58, encoding="utf-8")
+            draw.text((x1, y1 - 58), label, (255, 0, 0), font=font)
             frame = cv2.cvtColor(np.array(pilimg), cv2.COLOR_RGB2BGR)
             cv2.rectangle(frame, (x1, y1), (x2, y2), (255, 0, 0), 2)
+
+            frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+
     return frame
 
 
@@ -134,5 +138,5 @@ recognition_interface = gr.Interface(
 
 if __name__ == '__main__':
     # 同时启动注册和识别界面
-    register_interface.launch()
+    # register_interface.launch()
     recognition_interface.launch()
